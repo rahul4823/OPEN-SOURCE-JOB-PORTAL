@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            color: #333;
+            background-color: #ecf0f1;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .sidebar h2 {
+            margin: 0;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 10px 0;
+        }
+
+        .sidebar ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+        }
+
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .dark-mode {
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+
+        .dark-mode .sidebar {
+            background-color: #1a252f;
+        }
+
+        .dark-mode .main-content {
+            background-color: #2c3e50;
+        }
+
+        .dark-mode .content {
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+
+        .dark-mode .header {
+            color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="index.html" onclick="showSection('home')">Home</a></li>
+                <li><a href="#" onclick="showSection('analytics')">Appilcations</a></li>
+                <li><a href="login.html" onclick="showSection('settings')">logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <button onclick="toggleTheme()">Toggle Theme</button>
+            </div>
+            <div class="content">
+                <div id="home" class="section active">
+                    <h2>Home</h2>
+                    <p>Welcome to the dashboard!</p>
+                </div>
+                <div id="analytics" class="section">
+                    <h2>Analytics</h2>
+                    <p>Analytics data will be displayed here.</p>
+                </div>
+                <div id="settings" class="section">
+                    <h2>Settings</h2>
+                    <p>Settings options will be displayed here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>

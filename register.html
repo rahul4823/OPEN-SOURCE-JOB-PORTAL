@@ -1,0 +1,172 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        
+        body {
+            text-align: center;
+            background-image: linear-gradient(135deg, #007991 30%, #78ffd6 90%);
+            font-family: "Montserrat", sans-serif;
+            font-size: 12px;
+            line-height: 1em;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h2, a {
+            font-family: 'Parisienne', cursive;
+            color: #fff;
+            font-size: 50px;
+            text-decoration: none;
+            text-shadow: 2px 2px 3px lightblue;
+            padding-top: 35px;
+        }
+
+        .register-container {
+            width: 80%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .register-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .register-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 1rem;
+        }
+
+        .register-container button {
+            background-color: #f2395a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .register-container button:hover {
+            background-color: #f02146;
+        }
+
+        .register-container a {
+            display: block;
+            margin-top: 10px;
+            color: #fff;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 3px;
+            font-size: 1rem;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>REGISTER</h2>
+        <div id="message" class="message" style="display: none;"></div>
+        <form id="register-form">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+            <button type="submit">Register</button>
+        </form>
+        <a href="login.html">Already have an account? Login here.</a>
+    </div>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const messageElement = document.getElementById('message');
+
+            messageElement.style.display = 'none';
+
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match. Please try again.', 'error');
+                return;
+            }
+
+            const userData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: password
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/user-api/new-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.message === 'user created') {
+                        showMessage('Registration successful. You can now login.', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    } else if (result.message === 'user already exists') {
+                        showMessage('User already exists. Please try a different username.', 'error');
+                    }
+                } else {
+                    showMessage('An error occurred during registration. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('An error occurred during registration. Please try again.', 'error');
+            }
+        });
+
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = message;
+            messageElement.className = `message ${type}`;
+            messageElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
